@@ -1,0 +1,34 @@
+{
+  "name": "wpbones/wpkirk-helpers",
+  "homepage": "https://github.com/wpbones/wpkirk-helpers",
+  "license": "MIT",
+  "type": "library",
+  "description": "Helpers functions for WP Bones Boilerplate plugin",
+  "keywords": [
+    "features",
+    "helpers",
+    "WP Bones"
+  ],
+  "authors": [
+    {
+      "name": "Giovambattista Fazioli",
+      "email": "wpbones.info@gmail.com",
+      "homepage": "https://wpbones.com/docs/Packages/official-packages"
+    }
+  ],
+  "support": {
+    "email": "wpbones.info@gmail.com",
+    "issues": "https://github.com/wpbones/wpkirk-helpers/issues"
+  },
+  "require": {
+    "php": ">=7.4",
+    "symfony/yaml": "^5.0"
+  },
+  "autoload": {
+    "files": [
+      "src/helpers.php"
+    ]
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true
+}

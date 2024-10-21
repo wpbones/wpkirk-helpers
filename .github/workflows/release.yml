@@ -1,0 +1,32 @@
+name: Release Documentation
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  update-changelog:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Generate release notes
+        run: npm run generate-release-notes
+
+      - name: Update CHANGELOG.md
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
+          git add CHANGELOG.md
+          git commit -m 'Update CHANGELOG.md with release notes'
+          git push

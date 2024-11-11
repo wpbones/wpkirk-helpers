@@ -47,19 +47,23 @@ if (!function_exists('wpkirk_section')) {
    * This function generates an H2 header with the specified ID and content.
    * The content can be a string or a callable function.
    *
-   * @param string $id The ID for the section header.
    * @param string|callable $strFunc The content for the section header.
    * @return void
    */
-  function wpkirk_section($id, $strFunc)
+  function wpkirk_section($strFunc)
   {
-    echo "<hr/><h1 class=\"wpkirk-section\" id=\"$id\">";
     if (is_string($strFunc) && !empty($strFunc)) {
-      echo $strFunc;
+      $title = $strFunc;
     }
     if (is_callable($strFunc)) {
-      echo $strFunc();
+      $title = $strFunc();
     }
+
+    // transform the title is snake case
+    $id = strtolower(str_replace(' ', '-', $title));
+
+    echo "<hr/><h1 class=\"wpkirk-section\" id=\"$id\">";
+    echo $title;
     echo '</h1><hr/>';
   }
 }

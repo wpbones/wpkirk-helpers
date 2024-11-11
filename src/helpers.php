@@ -77,17 +77,45 @@ if (!function_exists('wpkirk_code')) {
    * with syntax highlighting based on the specified language.
    *
    * @param string $func The code to display. If the string starts with "@", the function will load a file.
-   * @param bool $eval Whether to evaluate the code (default: false).
-   * @param string $language The language for syntax highlighting (default: 'php').
+   * @param array $options An array of options for the code block.
+   *  The following options are supported:
+   *  'eval' => bool - If true, the code will be evaluated.
+   *  'language' => string - The language of the code block.
+   *  'details' => bool - If true, the code block will be wrapped in a details element.
+   *  'line-numbers' => bool - If true, line numbers will be displayed.
    * @return void
    */
-  function wpkirk_code($func = '', $eval = false, $language = 'php', $openDetails = true)
+  function wpkirk_code($func = '', $options = [])
   {
+
+    $defaults = [
+      'evail' => false,
+      'language' => 'php',
+      'details' => true,
+      'line-numbers' => false,
+    ];
+
+    $options = array_merge($defaults, $options);
+
+    $eval = $options['eval'];
+    $language = $options['language'];
+    $openDetails = $options['details'];
+    $lineNumbers = $options['line-numbers'];
+
     // if $func string starts with "@" we will load a file
     if (substr($func, 0, 1) === '@') {
       $basePath = WPKirk()->basePath;
       $filename = ltrim($func, '@');
       $file = file_get_contents($basePath . $filename);
+      $file = trim(rtrim($file, PHP_EOL));
+
+      // get the extension of the file
+      $language = pathinfo($basePath . $filename, PATHINFO_EXTENSION);
+
+      // work around for jsx and tsx as they seem to be not supported by prismjs
+      if (in_array($language, ['jsx', 'tsx'])) {
+        $language = 'ts';
+      }
 
       $func = htmlspecialchars($file);
     }
@@ -100,7 +128,11 @@ if (!function_exists('wpkirk_code')) {
 
     $result = $replaceBackticksWithCode($func);
 
-    echo '<pre><code class="language-' . $language . '">';
+    if (!empty($filename)) {
+      echo '<div class="wpkirk-filename">' . ltrim($filename, '/') . '</div>' . PHP_EOL;
+    }
+
+    echo '<pre' . ($lineNumbers ? ' class="line-numbers"' : '') . '><code class="language-' . $language . '">';
     echo $result;
     echo '</code></pre>';
 

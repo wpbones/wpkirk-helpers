@@ -79,17 +79,19 @@ if (!function_exists('wpkirk_code')) {
    * @param string $func The code to display. If the string starts with "@", the function will load a file.
    * @param array $options An array of options for the code block.
    *  The following options are supported:
-   *  'eval' => bool - If true, the code will be evaluated.
-   *  'language' => string - The language of the code block.
-   *  'details' => bool - If true, the code block will be wrapped in a details element.
-   *  'line-numbers' => bool - If true, line numbers will be displayed.
+   *
+   *  'eval'          => bool - If true, the code will be evaluated.
+   *  'language'      => string - The language of the code block.
+   *  'details'       => bool - If true, the code block will be wrapped in a details element.
+   *  'line-numbers'  => bool - If true, line numbers will be displayed.
+   *
    * @return void
    */
   function wpkirk_code($func = '', $options = [])
   {
 
     $defaults = [
-      'evail' => false,
+      'eval' => false,
       'language' => 'php',
       'details' => true,
       'line-numbers' => false,

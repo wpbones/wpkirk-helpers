@@ -19,8 +19,6 @@ if (!function_exists('wpkirk_toc')) {
 
     preg_match_all($pattern, $buffer, $matches, PREG_SET_ORDER);
 
-    error_log(print_r($matches, true));
-
     $toc = '<div class="wp-kirk-toc clearfix">';
     $toc .= empty($title) ? '' : '<h2>' . $title . '</h2>';
     $toc .= '<ul>';

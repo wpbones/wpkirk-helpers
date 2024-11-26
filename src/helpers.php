@@ -52,9 +52,10 @@ if (!function_exists('wpkirk_section')) {
   {
     if (is_string($strFunc) && !empty($strFunc)) {
       $title = $strFunc;
-    }
-    if (is_callable($strFunc)) {
-      $title = $strFunc();
+    } elseif (is_callable($strFunc)) {
+      $title = call_user_func($strFunc);
+    } else {
+      throw new InvalidArgumentException('The argument must be a non-empty string or a callable.');
     }
 
     // transform the title is snake case

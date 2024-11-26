@@ -143,7 +143,11 @@ if (!function_exists('wpkirk_code')) {
     echo $result;
     echo '</code></pre>';
 
-    if ($eval) {
+    if ($eval === 'execute') {
+      return eval($func);
+    }
+
+    if ($eval === true) {
       echo '<details ' . ($openDetails ? 'open' : '') . '>';
       echo '<summary>' . __('Output', 'wp-kirk') . '</summary>';
       echo '<pre><code class="language-' . $languageEval . '">';

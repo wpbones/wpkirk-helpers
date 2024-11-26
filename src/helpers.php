@@ -91,16 +91,22 @@ if (!function_exists('wpkirk_code')) {
     $defaults = [
       'eval' => false,
       'language' => 'php',
+      'language-eval' => 'txt',
       'details' => true,
       'line-numbers' => false,
+      'extract' => []
     ];
 
     $options = array_merge($defaults, $options);
 
     $eval = $options['eval'];
     $language = $options['language'];
+    $languageEval = $options['language-eval'];
     $openDetails = $options['details'];
     $lineNumbers = $options['line-numbers'];
+
+    $variables = $options['extract'];
+    extract($variables);
 
     // if $func string starts with "@" we will load a file
     if (substr($func, 0, 1) === '@') {
@@ -139,7 +145,7 @@ if (!function_exists('wpkirk_code')) {
     if ($eval) {
       echo '<details ' . ($openDetails ? 'open' : '') . '>';
       echo '<summary>' . __('Output', 'wp-kirk') . '</summary>';
-      echo '<pre><code class="language-txt">';
+      echo '<pre><code class="language-' . $languageEval . '">';
       echo eval($func);
       echo '</code></pre>';
       echo '</details>';

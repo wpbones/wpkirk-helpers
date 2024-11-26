@@ -46,7 +46,7 @@ if (!function_exists('wpkirk_section')) {
    * The content can be a string or a callable function.
    *
    * @param string|callable $strFunc The content for the section header.
-   * @return void
+   * @return string The ID of the section header.
    */
   function wpkirk_section($strFunc)
   {
@@ -64,6 +64,8 @@ if (!function_exists('wpkirk_section')) {
     echo "<hr/><h1 class=\"wpkirk-section\" id=\"$id\">";
     echo $title;
     echo '</h1><hr/>';
+
+    return $id;
   }
 }
 
@@ -95,6 +97,7 @@ if (!function_exists('wpkirk_code')) {
       'language-eval' => 'txt',
       'details' => true,
       'line-numbers' => false,
+      'line' => false,
       'extract' => []
     ];
 
@@ -105,6 +108,7 @@ if (!function_exists('wpkirk_code')) {
     $languageEval = $options['language-eval'];
     $openDetails = $options['details'];
     $lineNumbers = $options['line-numbers'];
+    $line = $options['line'];
 
     $variables = $options['extract'];
     extract($variables);
@@ -134,12 +138,13 @@ if (!function_exists('wpkirk_code')) {
     };
 
     $result = $replaceBackticksWithCode($func);
+    $dataLine = $line ? ' data-line="' . $line . '" ' : '';
 
     if (!empty($filename)) {
       echo '<div class="wpkirk-filename">' . ltrim($filename, '/') . '</div>' . PHP_EOL;
     }
 
-    echo '<pre' . ($lineNumbers ? ' class="line-numbers"' : '') . '><code class="language-' . $language . '">';
+    echo '<pre' . $dataLine . ($lineNumbers ? ' class="line-numbers"' : '') . '><code class="language-' . $language . '">';
     echo $result;
     echo '</code></pre>';
 

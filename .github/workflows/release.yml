@@ -1,4 +1,4 @@
-name: Create Release and Update Changelog
+name: Release on Tag
 
 on:
   push:
@@ -9,48 +9,40 @@ jobs:
   create-release:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v2
 
-      - name: Set up Git
-        run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+    - name: Get the previous tag
+      id: prev-tag
+      run: echo "::set-output name=prev-tag::$(git describe --tags --abbrev=0 HEAD^1)"
 
-      - name: Get the tag name
-        id: get_tag_name
-        run: echo "tag=$(echo ${GITHUB_REF#refs/tags/})" >> $GITHUB_ENV
+    - name: Get commits since previous tag
+      id: commits
+      run: echo "::set-output name=commits::$(git log ${{ steps.prev-tag.outputs.prev-tag }}..HEAD --pretty=format:'%h %s')"
 
-      - name: Get previous tag
-        id: get_previous_tag
-        run: echo "previous_tag=$(git describe --tags --abbrev=0 ${GITHUB_SHA}^1)" >> $GITHUB_ENV
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: ${{ github.ref }}
+        body: |
+          ${{ steps.commits.outputs.commits }}
 
-      - name: Get release notes
-        id: get_release_notes
-        run: |
-          echo "notes=$(git log --pretty=format:'- %s' $(git describe --tags --abbrev=0 ${GITHUB_SHA}^1)..${GITHUB_SHA})" >> $GITHUB_ENV
+    - name: Update CHANGELOG.md
+      run: |
+        echo "## ${{ github.ref }} - $(date +'%B %d, %Y')" > new_changelog.md
+        echo "${{ steps.commits.outputs.commits }}" >> new_changelog.md
+        cat CHANGELOG.md >> new_changelog.md
+        mv new_changelog.md CHANGELOG.md
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        git add CHANGELOG.md
+        git commit -m "Update CHANGELOG.md for ${{ github.ref }}"
 
-      - name: Create GitHub Release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ env.tag }}
-          release_name: ${{ env.tag }}
-          body: ${{ env.notes }}
-          draft: false
-          prerelease: false
-
-      - name: Update CHANGELOG.md
-        run: |
-          echo "## ${{ env.tag }} - $(date +'%B %d, %Y')" > new_changelog.md
-          echo "${{ env.notes }}" >> new_changelog.md
-          echo "" >> new_changelog.md
-          cat CHANGELOG.md >> new_changelog.md
-          mv new_changelog.md CHANGELOG.md
-
-      - name: Commit and push changes
-        run: |
-          git add CHANGELOG.md
-          git commit -m "Update CHANGELOG.md for ${{ env.tag }}"
-          git push
+    - name: Push changes
+      run: |
+        git branch update-changelog
+        git push origin update-changelog

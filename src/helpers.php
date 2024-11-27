@@ -46,15 +46,16 @@ if (!function_exists('wpkirk_section')) {
    * The content can be a string or a callable function.
    *
    * @param string|callable $strFunc The content for the section header.
-   * @return void
+   * @return string The ID of the section header.
    */
   function wpkirk_section($strFunc)
   {
     if (is_string($strFunc) && !empty($strFunc)) {
       $title = $strFunc;
-    }
-    if (is_callable($strFunc)) {
-      $title = $strFunc();
+    } elseif (is_callable($strFunc)) {
+      $title = call_user_func($strFunc);
+    } else {
+      throw new InvalidArgumentException('The argument must be a non-empty string or a callable.');
     }
 
     // transform the title is snake case
@@ -63,6 +64,8 @@ if (!function_exists('wpkirk_section')) {
     echo "<hr/><h1 class=\"wpkirk-section\" id=\"$id\">";
     echo $title;
     echo '</h1><hr/>';
+
+    return $id;
   }
 }
 
@@ -91,16 +94,24 @@ if (!function_exists('wpkirk_code')) {
     $defaults = [
       'eval' => false,
       'language' => 'php',
+      'language-eval' => 'txt',
       'details' => true,
       'line-numbers' => false,
+      'line' => false,
+      'extract' => []
     ];
 
     $options = array_merge($defaults, $options);
 
     $eval = $options['eval'];
     $language = $options['language'];
+    $languageEval = $options['language-eval'];
     $openDetails = $options['details'];
     $lineNumbers = $options['line-numbers'];
+    $line = $options['line'];
+
+    $variables = $options['extract'];
+    extract($variables);
 
     // if $func string starts with "@" we will load a file
     if (substr($func, 0, 1) === '@') {
@@ -127,19 +138,24 @@ if (!function_exists('wpkirk_code')) {
     };
 
     $result = $replaceBackticksWithCode($func);
+    $dataLine = $line ? ' data-line="' . $line . '" ' : '';
 
     if (!empty($filename)) {
       echo '<div class="wpkirk-filename">' . ltrim($filename, '/') . '</div>' . PHP_EOL;
     }
 
-    echo '<pre' . ($lineNumbers ? ' class="line-numbers"' : '') . '><code class="language-' . $language . '">';
+    echo '<pre' . $dataLine . ($lineNumbers ? ' class="line-numbers"' : '') . '><code class="language-' . $language . '">';
     echo $result;
     echo '</code></pre>';
 
-    if ($eval) {
+    if ($eval === 'execute') {
+      return eval($func);
+    }
+
+    if ($eval === true) {
       echo '<details ' . ($openDetails ? 'open' : '') . '>';
       echo '<summary>' . __('Output', 'wp-kirk') . '</summary>';
-      echo '<pre><code class="language-txt">';
+      echo '<pre><code class="language-' . $languageEval . '">';
       echo eval($func);
       echo '</code></pre>';
       echo '</details>';

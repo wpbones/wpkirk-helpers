@@ -1,6 +1,5 @@
 # Release Notes for 1.x
 
-
 ## [Upcoming Release]
 
 - This release introduces the new feature of automatic release creation.
@@ -9,9 +8,12 @@
 
 - Placeholder for unreleased changes
 
-## [Automated Release Notes]
+## 2.0.1 - November 27, 2024
 
-- Placeholder for automated release notes
+- ✨ adds support for highlight line numer and id for section
+- ✨ adds the eval execute
+- 🐛 fixes potential issue on the section title
+- ✨ adds extract variable and language-eval
 
 ## 2.0.0 - November 15, 2024
 

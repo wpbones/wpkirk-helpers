@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up Git
         run: |
@@ -19,32 +19,32 @@ jobs:
 
       - name: Get the tag name
         id: get_tag_name
-        run: echo "::set-output name=tag::$(echo ${GITHUB_REF#refs/tags/})"
+        run: echo "tag=$(echo ${GITHUB_REF#refs/tags/})" >> $GITHUB_ENV
 
       - name: Get previous tag
         id: get_previous_tag
-        run: echo "::set-output name=previous_tag::$(git describe --tags --abbrev=0 ${GITHUB_SHA}^1)"
+        run: echo "previous_tag=$(git describe --tags --abbrev=0 ${GITHUB_SHA}^1)" >> $GITHUB_ENV
 
       - name: Get release notes
         id: get_release_notes
         run: |
-          echo "::set-output name=notes::$(git log --pretty=format:'- %s' $(git describe --tags --abbrev=0 ${GITHUB_SHA}^1)..${GITHUB_SHA})"
+          echo "notes=$(git log --pretty=format:'- %s' $(git describe --tags --abbrev=0 ${GITHUB_SHA}^1)..${GITHUB_SHA})" >> $GITHUB_ENV
 
       - name: Create GitHub Release
-        uses: actions/create-release@v1
+        uses: actions/create-release@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.get_tag_name.outputs.tag }}
-          release_name: ${{ steps.get_tag_name.outputs.tag }}
-          body: ${{ steps.get_release_notes.outputs.notes }}
+          tag_name: ${{ env.tag }}
+          release_name: ${{ env.tag }}
+          body: ${{ env.notes }}
           draft: false
           prerelease: false
 
       - name: Update CHANGELOG.md
         run: |
-          echo "## ${{ steps.get_tag_name.outputs.tag }} - $(date +'%B %d, %Y')" > new_changelog.md
-          echo "${{ steps.get_release_notes.outputs.notes }}" >> new_changelog.md
+          echo "## ${{ env.tag }} - $(date +'%B %d, %Y')" > new_changelog.md
+          echo "${{ env.notes }}" >> new_changelog.md
           echo "" >> new_changelog.md
           cat CHANGELOG.md >> new_changelog.md
           mv new_changelog.md CHANGELOG.md
@@ -52,5 +52,5 @@ jobs:
       - name: Commit and push changes
         run: |
           git add CHANGELOG.md
-          git commit -m "Update CHANGELOG.md for ${{ steps.get_tag_name.outputs.tag }}"
+          git commit -m "Update CHANGELOG.md for ${{ env.tag }}"
           git push

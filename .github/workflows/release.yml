@@ -45,6 +45,11 @@ jobs:
     - name: Configure Git pull strategy
       run: git config pull.rebase false
 
+    - name: Ensure branch exists
+      run: |
+        git fetch origin
+        git checkout -b update-changelog || git checkout update-changelog
+
     - name: Pull latest changes
       run: git pull origin update-changelog
 

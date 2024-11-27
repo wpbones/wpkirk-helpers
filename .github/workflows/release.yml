@@ -12,6 +12,12 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
+    - name: Create and checkout update-changelog branch
+      run: |
+        git fetch origin
+        git checkout main
+        git checkout -b update-changelog      
+
     - name: Get the previous tag
       id: prev-tag
       run: echo "::set-output name=prev-tag::$(git describe --tags --abbrev=0 HEAD^1)"
@@ -45,16 +51,13 @@ jobs:
     - name: Configure Git pull strategy
       run: git config pull.rebase false
 
-    - name: Ensure branch exists
+    - name: Merge update-changelog in main
       run: |
-        git fetch origin
         git checkout main
-        git checkout -b update-changelog || git checkout update-changelog
+        git merge update-changelog
+        git push origin main
 
-    - name: Pull latest changes
-      run: git pull origin update-changelog
-
-    - name: Push changes
+    - name: Delete update-changelog branch
       run: |
-        git branch update-changelog
-        git push origin update-changelog
+        git push origin --delete update-changelog
+        git branch -d update-changelog        

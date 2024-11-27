@@ -48,6 +48,7 @@ jobs:
     - name: Ensure branch exists
       run: |
         git fetch origin
+        git checkout main
         git checkout -b update-changelog || git checkout update-changelog
 
     - name: Pull latest changes

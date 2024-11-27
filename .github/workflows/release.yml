@@ -31,7 +31,7 @@ jobs:
           echo "notes=$(git log --pretty=format:'- %s' $(git describe --tags --abbrev=0 ${GITHUB_SHA}^1)..${GITHUB_SHA})" >> $GITHUB_ENV
 
       - name: Create GitHub Release
-        uses: actions/create-release@v2
+        uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:

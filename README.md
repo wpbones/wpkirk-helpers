@@ -1,28 +1,15 @@
 # WP Kirk Helpers
 
-<p align="center">
+<div align="center">
 
-  <a href="https://packagist.org/packages/wpbones/wpkirk-helpers">
-  <img src="https://poser.pugx.org/wpbones/wpkirk-helpers/v/stable?style=for-the-badge" alt="Latest Stable Version" />
-  </a>
+[![Latest Stable Version](https://poser.pugx.org/wpbones/wpkirk-helpers/v/stable?style=for-the-badge)](https://packagist.org/packages/wpbones/wpkirk-helpers) &nbsp;
+[![Latest Unstable Version](https://poser.pugx.org/wpbones/wpkirk-helpers/v/unstable?style=for-the-badge)](https://packagist.org/packages/wpbones/wpkirk-helpers) &nbsp;
+[![Total Downloads](https://poser.pugx.org/wpbones/wpkirk-helpers/downloads?style=for-the-badge)](https://packagist.org/packages/wpbones/wpkirk-helpers) &nbsp;
+[![License](https://poser.pugx.org/wpbones/wpkirk-helpers/license?style=for-the-badge)](https://packagist.org/packages/wpbones/wpkirk-helpers) &nbsp;
+[![Monthly Downloads](https://poser.pugx.org/wpbones/wpkirk-helpers/d/monthly?style=for-the-badge)](https://packagist.org/packages/wpbones/wpkirk-helpers)
 
-  <a href="https://packagist.org/packages/wpbones/wpkirk-helpers">
-   <img src="https://poser.pugx.org/wpbones/wpkirk-helpers/v/unstable?style=for-the-badge" alt="Latest Unstable Version" />
-  </a>
 
-  <a href="https://packagist.org/packages/wpbones/wpkirk-helpers">
-   <img src="https://poser.pugx.org/wpbones/wpkirk-helpers/downloads?style=for-the-badge" alt="Total Downloads" />
-  </a>
-
-  <a href="https://packagist.org/packages/wpbones/wpkirk-helpers">
-   <img src="https://poser.pugx.org/wpbones/wpkirk-helpers/license?style=for-the-badge" alt="License" />
-  </a>
-
-  <a href="https://packagist.org/packages/wpbones/wpkirk-helpers">
-   <img src="https://poser.pugx.org/wpbones/wpkirk-helpers/d/monthly?style=for-the-badge" alt="Monthly Downloads" />
-  </a>
-
-</p>
+</div>
 
 WP Kirk Helpers is a (internal) package that provides a set of functions to help you to develop a WP bones Boilerplate plugin.
 

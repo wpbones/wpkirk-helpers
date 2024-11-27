@@ -46,7 +46,7 @@ if (!function_exists('wpkirk_section')) {
    * The content can be a string or a callable function.
    *
    * @param string|callable $strFunc The content for the section header.
-   * @return string The ID of the section header.
+   * @return string The ID of the section header. You may use that to link back the anchor.
    */
   function wpkirk_section($strFunc)
   {

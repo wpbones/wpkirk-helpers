@@ -22,6 +22,10 @@ jobs:
       id: prev-tag
       run: echo "::set-output name=prev-tag::$(git describe --tags --abbrev=0 HEAD^1)"
 
+    - name: Extract tag name
+      id: extract-tag
+      run: echo "::set-output name=tag::${GITHUB_REF#refs/tags/}"      
+
     - name: Get commits since previous tag
       id: commits
       run: echo "::set-output name=commits::$(git log ${{ steps.prev-tag.outputs.prev-tag }}..HEAD --pretty=format:'%h %s')"
@@ -33,20 +37,20 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: ${{ github.ref }}
-        release_name: ${{ github.ref }}
+        release_name: ${{ steps.extract-tag.outputs.tag }}
         body: |
           ${{ steps.commits.outputs.commits }}
 
     - name: Update CHANGELOG.md
       run: |
-        echo "## ${{ github.ref }} - $(date +'%B %d, %Y')" > new_changelog.md
+        echo "## ${{ steps.extract-tag.outputs.tag }} - $(date +'%B %d, %Y')" > new_changelog.md
         echo "${{ steps.commits.outputs.commits }}" >> new_changelog.md
         cat CHANGELOG.md >> new_changelog.md
         mv new_changelog.md CHANGELOG.md
         git config --global user.name 'github-actions[bot]'
         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
         git add CHANGELOG.md
-        git commit -m "Update CHANGELOG.md for ${{ github.ref }}"
+        git commit -m "Update CHANGELOG.md for ${{ steps.extract-tag.outputs.tag }}"
 
     - name: Configure Git pull strategy
       run: git config pull.rebase false
@@ -59,5 +63,4 @@ jobs:
 
     - name: Delete update-changelog branch
       run: |
-        git push origin --delete update-changelog
         git branch -d update-changelog        

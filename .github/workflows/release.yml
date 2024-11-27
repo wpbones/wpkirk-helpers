@@ -42,6 +42,9 @@ jobs:
         git add CHANGELOG.md
         git commit -m "Update CHANGELOG.md for ${{ github.ref }}"
 
+    - name: Pull latest changes
+      run: git pull origin update-changelog
+
     - name: Push changes
       run: |
         git branch update-changelog

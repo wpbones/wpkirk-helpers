@@ -1,0 +1,57 @@
+name: Create Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Generate release notes
+        run: npm run generate-release-notes
+
+      - name: Create GitHub release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          body_path: CHANGELOG.md
+
+      - name: Fetch previous tag
+        id: fetch_previous_tag
+        run: echo "::set-output name=previous_tag::$(git describe --tags --abbrev=0 HEAD^1)"
+
+      - name: Get commits since previous tag
+        id: get_commits
+        run: echo "::set-output name=commits::$(git log ${{ steps.fetch_previous_tag.outputs.previous_tag }}..HEAD --pretty=format:'%s')"
+
+      - name: Prepend release note to CHANGELOG.md
+        run: |
+          echo "## ${{ github.ref }}" > temp_changelog.md
+          echo "${{ steps.get_commits.outputs.commits }}" >> temp_changelog.md
+          cat CHANGELOG.md >> temp_changelog.md
+          mv temp_changelog.md CHANGELOG.md
+
+      - name: Commit and push updated CHANGELOG.md
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
+          git add CHANGELOG.md
+          git commit -m 'Update CHANGELOG.md with release notes'
+          git push

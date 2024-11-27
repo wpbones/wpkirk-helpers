@@ -58,3 +58,19 @@ and run
 composer install
 ```
 
+## Automatic Release Creation
+
+This repository includes a GitHub Actions workflow that automates the creation of a GitHub release and updates the `CHANGELOG.md` file whenever a new tag is pushed to the repository.
+
+### Workflow File
+
+The workflow file is located at `.github/workflows/create-release.yml`. It performs the following actions:
+
+- Triggers on the creation of a new tag.
+- Fetches the latest commits since the previous tag.
+- Creates a GitHub release with the tag name as the title and the latest commits as the content.
+- Prepends the release note to the beginning of the `CHANGELOG.md` file.
+- Commits and pushes the updated `CHANGELOG.md` file to the repository.
+
+By using this workflow, you can ensure that your release notes are always up-to-date and automatically generated based on the latest commits.
+

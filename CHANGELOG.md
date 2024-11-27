@@ -1,8 +1,8 @@
 # Release Notes for 1.x
 
-## 1.0.0 - October 15, 2024
+## [Upcoming Release]
 
-- First release
+- This release introduces the new feature of automatic release creation.
 
 ## [Unreleased]
 
@@ -11,3 +11,7 @@
 ## [Automated Release Notes]
 
 - Placeholder for automated release notes
+
+## 1.0.0 - October 15, 2024
+
+- First release

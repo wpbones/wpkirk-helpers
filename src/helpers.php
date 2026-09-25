@@ -153,10 +153,32 @@ if (!function_exists('wpkirk_code')) {
     }
 
     if ($eval === true) {
-      echo '<details ' . ($openDetails ? 'open' : '') . '>';
+      // The example runs into a buffer, so that one that throws shows its error in its own
+      // output, opened, instead of ending the whole page (e.g. Eloquent on WordPress
+      // Playground, which has no MySQL). The evaluated code shares this scope, hence the
+      // prefixed names.
+      $__wpkirkLevel = ob_get_level();
+      $__wpkirkError = null;
+      ob_start();
+      try {
+        echo eval($func);
+      } catch (\Throwable $__wpkirkThrown) {
+        $__wpkirkError = get_class($__wpkirkThrown) . ': ' . $__wpkirkThrown->getMessage();
+      }
+      $__wpkirkOutput = '';
+      while (ob_get_level() > $__wpkirkLevel) {
+        $__wpkirkOutput = ob_get_clean() . $__wpkirkOutput;
+      }
+
+      if ($__wpkirkError !== null) {
+        error_log('wpkirk_code: ' . $__wpkirkError);
+        $__wpkirkOutput .= ($__wpkirkOutput === '' ? '' : PHP_EOL) . htmlspecialchars($__wpkirkError);
+      }
+
+      echo '<details ' . ($openDetails || $__wpkirkError !== null ? 'open' : '') . '>';
       echo '<summary>' . __('Output', 'wp-kirk') . '</summary>';
       echo '<pre><code class="language-' . $languageEval . '">';
-      echo eval($func);
+      echo $__wpkirkOutput;
       echo '</code></pre>';
       echo '</details>';
     }

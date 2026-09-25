@@ -167,6 +167,12 @@ if (!function_exists('wpkirk_code')) {
       }
       $__wpkirkOutput = '';
       while (ob_get_level() > $__wpkirkLevel) {
+        // A buffer the example made non-removable stays open (PHP flushes it at the end of the
+        // request): ob_get_clean() would not close it, returning '' rather than false, and the
+        // loop would never end.
+        if (!(ob_get_status()['flags'] & PHP_OUTPUT_HANDLER_REMOVABLE)) {
+          break;
+        }
         $__wpkirkOutput = ob_get_clean() . $__wpkirkOutput;
       }
 

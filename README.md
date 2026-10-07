@@ -29,13 +29,13 @@ You can use composer to install this package:
 composer require wpbones/helpers
 ```
 
-You may also to add `"wpbones/wpkirk-helpers": "~1.0"` in the `composer.json` file of your plugin:
+You may also to add `"wpbones/wpkirk-helpers": "^2.0"` in the `composer.json` file of your plugin:
 
 ```json
   "require": {
-    "php": ">=7.4.0",
-    "wpbones/wpbones": "~1.7",
-    "wpbones/wpkirk-helpers": "~1.0"
+    "php": ">=8.1",
+    "wpbones/wpbones": "^3.0",
+    "wpbones/wpkirk-helpers": "^2.0"
   },
 ```
 

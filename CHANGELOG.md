@@ -1,3 +1,5 @@
+From 2.0.14 the changelog is the [GitHub Releases](https://github.com/wpbones/wpkirk-helpers/releases).
+
 ## 2.0.13 - September 25, 2026
 
 - 🐛 `wpkirk_code()`: an `eval` example that throws shows its error in its own Output, opened, instead of ending the page with a fatal error (wpbones/WPBones#110)

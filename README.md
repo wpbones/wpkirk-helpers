@@ -3,7 +3,6 @@
 <div align="center">
 
 [![Latest Stable Version](https://poser.pugx.org/wpbones/wpkirk-helpers/v/stable?style=for-the-badge)](https://packagist.org/packages/wpbones/wpkirk-helpers) &nbsp;
-[![Latest Unstable Version](https://poser.pugx.org/wpbones/wpkirk-helpers/v/unstable?style=for-the-badge)](https://packagist.org/packages/wpbones/wpkirk-helpers) &nbsp;
 [![Total Downloads](https://poser.pugx.org/wpbones/wpkirk-helpers/downloads?style=for-the-badge)](https://packagist.org/packages/wpbones/wpkirk-helpers) &nbsp;
 [![License](https://poser.pugx.org/wpbones/wpkirk-helpers/license?style=for-the-badge)](https://packagist.org/packages/wpbones/wpkirk-helpers) &nbsp;
 [![Monthly Downloads](https://poser.pugx.org/wpbones/wpkirk-helpers/d/monthly?style=for-the-badge)](https://packagist.org/packages/wpbones/wpkirk-helpers)
